@@ -130,7 +130,6 @@ const App = () => {
     </form>  
     </div>
   )
-
   return (
     <div>
       {!user && loginForm()}
@@ -148,5 +147,4 @@ const App = () => {
     </div>
   )
 }
-
 export default App
