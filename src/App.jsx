@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
+import './styles/styles.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +13,8 @@ const App = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [blogUrl, setBlogUrl] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [infoMessage, setInfoMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogList => {
@@ -34,8 +38,30 @@ const App = () => {
       window.localStorage.setItem('user', JSON.stringify(loginUser))
       setUsername('')
       setPassword('')
+      setInfoMessage('Hello ' + loginUser.name)
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
+    } catch (e) {
+      console.log(e)
+      setErrorMessage("Login failed: " + e.response.data.error)
+      setTimeout(() => {
+        setErrorMessage(null) 
+      }, 5000)
+    } 
+  }
+  const handleLogout = (e) => {
+    e.preventDefault();
+    try {
+      setInfoMessage('Have a nice day !')
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
+      window.localStorage.removeItem('user')
+      
+      setUser(null)
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setErrorMessage(exception.error)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -45,7 +71,7 @@ const App = () => {
     e.preventDefault();
     const newBlog = {
       title: title,
-      author: user.username,
+      author: user.name,
       url: blogUrl,
     }
     try {
@@ -53,9 +79,14 @@ const App = () => {
       console.log(blog)
       setBlogs([...blogs, blog])
       setTitle('')
+      setAuthor('')
       setBlogUrl('')
+      setInfoMessage('New blog "' + blog.title + '" is added')
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
     } catch (exception) {
-      setErrorMessage('wrong blog url')
+      setErrorMessage(exception)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -92,11 +123,8 @@ const App = () => {
   const blogForm = () => (
     <div>
       <div>{user.name} is logged in 
-      <button type="logout" onClick={() => {
-        window.localStorage.removeItem('user')
-        setUser(null)
-        }
-      }>logout</button></div>
+      <button type="logout" onClick={handleLogout} >logout</button>
+    </div>
     <h2>Add new blog</h2>
     <form onSubmit={addNewBlog}>
       <div>
@@ -133,14 +161,16 @@ const App = () => {
 
   return (
     <div>
+      <Notification error={errorMessage} info={infoMessage} />
       {!user && loginForm()}
       {user && blogForm()}
       {user &&
       <div>
+        
         <h2>Blogs</h2>
         {blogs.map(blog =>
         <form>
-          <Blog key={blog.id} blog={blog} blogs={blogs} user={user} setBlogs={setBlogs} />  
+          <Blog key={blog.id} blog={blog} blogs={blogs} user={user} setBlogs={setBlogs} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage} />  
         </form>
         )}
       </div>

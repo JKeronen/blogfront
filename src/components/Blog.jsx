@@ -1,6 +1,7 @@
 import blogService from '../services/blogs'
+import '../styles/styles.css'
 
-const Blog = ({ blog, blogs, user, setBlogs }) => {
+const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) => {
   const deleteBlog = async (e,id) => {
     e.preventDefault();
     console.log("User :" + user)
@@ -8,6 +9,10 @@ const Blog = ({ blog, blogs, user, setBlogs }) => {
     try {
       await blogService.deleteBlog(id, user)
       setBlogs(blogs.filter(blog => blog.id!== id))
+      setInfoMessage('Blog "' + blog.title + '" is deleted successfully')
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
     } catch (exception) {
       setErrorMessage('wrong blog id')
       setTimeout(() => {
