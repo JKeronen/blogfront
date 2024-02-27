@@ -1,5 +1,6 @@
 const Notification = ({ error, info }) => {
     if (info) {
+      console.log(info)
       return (
         <div className="info"> 
           {info}
@@ -7,6 +8,7 @@ const Notification = ({ error, info }) => {
       )
     }
     if (error) {
+      console.log(error)
       return (
         <div className="error">
           {error}

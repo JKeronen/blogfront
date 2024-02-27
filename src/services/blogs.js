@@ -12,6 +12,12 @@ const addNewBlog = async (newBlog, user) => {
   const response = await request
   return response.data
 }
+const updateBlog = async (updatedBlog, user) => {
+  const request = axios.put((`${blogUrl}/${updatedBlog.id}`), updatedBlog, {headers: {'Content-Type': 'application/json','Authorization': `bearer ${user.token}`}})
+  // käytetään await
+  const response = await request
+  return response.data
+}
 const deleteBlog = (id, user) => {
   const request = axios.delete((`${blogUrl}/${id}`), {headers: {'Content-Type': 'application/json','Authorization': `bearer ${user.token}`}})
   // käytetään then
@@ -19,4 +25,4 @@ const deleteBlog = (id, user) => {
 }
   
 
-export default { getAll, addNewBlog, deleteBlog }
+export default { getAll, addNewBlog, updateBlog, deleteBlog }
