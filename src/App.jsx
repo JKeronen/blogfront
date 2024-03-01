@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -18,7 +17,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogList => {
-      setBlogs(blogList)
+      //sort by most likes
+      setBlogs(blogList.toSorted((a, b) => b.likes - a.likes))
     })  
   }, [])
   useEffect(() => {
