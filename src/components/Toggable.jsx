@@ -1,5 +1,8 @@
 // This component set to show or hide the selected children component. It can be used to select multiple children.
-const Togglable = (props) => {
+import PropTypes from 'prop-types'
+import React from 'react'
+
+const Togglable = React.forwardRef((props, ref) => {
 
   const hideWhenVisible = { display: props.visibility ? 'none' : '' }
   const showWhenVisible = { display: props.visibility ? '' : 'none' }
@@ -18,5 +21,10 @@ const Togglable = (props) => {
       </div>
     </div>
   )
+})
+Togglable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired
 }
+Togglable.displayName = 'Togglable'
+
 export default Togglable

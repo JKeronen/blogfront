@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, StrictMode } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
@@ -47,6 +47,7 @@ const App = () => {
     } 
   }
   return (
+    <StrictMode>
     <div>
       <Notification error={errorMessage} info={infoMessage} />
       {!user &&
@@ -79,13 +80,14 @@ const App = () => {
         </Togglable>
           <h2>Blogs</h2>
           {blogs.map(blog =>
-            <form>
+            <form key={blog.id}>
               <Blog key={blog.id} blog={blog} blogs={blogs} user={user} setBlogs={setBlogs} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage} />  
             </form>
           )}
         </div>
       }
     </div>
+    </StrictMode>
   )
 }
 
