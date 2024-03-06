@@ -5,10 +5,10 @@ import '../styles/styles.css'
 const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) => {
   const [visible, setVisible] = useState(false)
   const deleteBlog = async (e,id) => {
-    e.preventDefault();
-    console.log("User :" + JSON.stringify(user))
-    console.log("Id :" + id)
-    if (window.confirm("Do you really want to remove blog?")) {
+    e.preventDefault()
+    console.log('User :' + JSON.stringify(user))
+    console.log('Id :' + id)
+    if (window.confirm('Do you really want to remove blog?')) {
       try {
         await blogService.deleteBlog(id, user)
         setBlogs(blogs.filter(blog => blog.id!== id))
@@ -21,16 +21,16 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) 
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
-    }}
+      }}
   }
   const showAll = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     setVisible(!visible)
   }
   const increaseLikes = async (e) => {
-    e.preventDefault();
-    console.log("Blogbefore" + JSON.stringify(blog))
-    console.log("User " + JSON.stringify(user))
+    e.preventDefault()
+    console.log('Blogbefore' + JSON.stringify(blog))
+    console.log('User ' + JSON.stringify(user))
     const likesincreased = {
       title: blog.title,
       author: blog.author,
@@ -39,7 +39,7 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) 
       likes: blog.likes + 1,
       id: blog.id,
     }
-    console.log("BlogUpdated" + JSON.stringify(likesincreased))
+    console.log('BlogUpdated' + JSON.stringify(likesincreased))
     try {
       await blogService.updateBlog(likesincreased, user)
       const updatedBlogs = blogs.map(blog => blog.id === likesincreased.id? likesincreased : blog)
@@ -69,7 +69,7 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) 
           Url: {blog.url}
         </div>
         <div>Likes: {blog.likes}
-          <button onClick={(e)=> increaseLikes(e)}>like</button>
+          <button onClick={(e) => increaseLikes(e)}>like</button>
         </div>
         <div>
           Author: {blog.author}
@@ -77,8 +77,8 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) 
         {(blog.author === user.name)&&
           <button onClick={(e) => deleteBlog(e, blog.id)}>Delete Blog</button>
         }
-      </div>   
-    </div>  
+      </div>
+    </div>
   )
 }
 export default Blog

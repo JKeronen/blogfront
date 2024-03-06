@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
 const BlogForm = (props) => {
-  const [title, setTitle] = useState('');
-  const [blogUrl, setBlogUrl] = useState('');
+  const [title, setTitle] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
 
   const addNewBlog = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const newBlog = {
       title: title,
       author: props.user.name,
@@ -30,30 +30,30 @@ const BlogForm = (props) => {
       }, 5000)
     }
   }
-  return ( 
-  <div>
-    <h2>Add new blog</h2>
-    <form onSubmit={addNewBlog}>
-      <div>
+  return (
+    <div>
+      <h2>Add new blog</h2>
+      <form onSubmit={addNewBlog}>
+        <div>
         Title
-        <input
-          type="text"
-          name="Title"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
+          <input
+            type="text"
+            name="Title"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
          Blog URL
-        <input
-          type="text"
-          name="Blog URL"
-          value={blogUrl}
-          onChange={({ target }) => setBlogUrl(target.value)}
-        />
-      </div>
-      <button type="submit">add</button>
-    </form>  
-  </div>
-)}
-  export default BlogForm
+          <input
+            type="text"
+            name="Blog URL"
+            value={blogUrl}
+            onChange={({ target }) => setBlogUrl(target.value)}
+          />
+        </div>
+        <button type="submit">add</button>
+      </form>
+    </div>
+  )}
+export default BlogForm
