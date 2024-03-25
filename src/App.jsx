@@ -9,6 +9,7 @@ import './styles/styles.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [blog, setBlog] = useState()
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [infoMessage, setInfoMessage] = useState(null)
@@ -46,6 +47,43 @@ const App = () => {
       }, 5000)
     }
   }
+  const increaseLikesOf = async (e, blog) => {
+    e.preventDefault()
+    console.log('Blogbefore' + JSON.stringify(blog))
+    console.log('User ' + JSON.stringify(user))
+    const likesincreased = { ...blog, likes: blog.likes+1 }
+    console.log('BlogUpdated' + JSON.stringify(likesincreased))
+    try {
+      await blogService.updateBlog(likesincreased, user)
+      const updatedBlogs = blogs.map(blog => blog.id === likesincreased.id? likesincreased : blog)
+      //sort by most likes
+      setBlogs(updatedBlogs.toSorted((a, b) => b.likes - a.likes))
+    } catch (exception) {
+      setErrorMessage(exception)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+  const addNewBlog = async ( blogi) => {
+    const newBlog = {...blogi, author: user.name}
+    
+    try {
+      const blog = await blogService.addNewBlog(newBlog, user)
+      console.log(blog)
+      setBlogs([...blogs, blog])
+      setInfoMessage('New blog "' + blog.title + '" is added')
+      setBlogFormVisible(false)
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setErrorMessage(exception)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
   return (
     <StrictMode>
       <div>
@@ -70,18 +108,13 @@ const App = () => {
             //handleTitleChange={({ target }) => setTitle(target.value)}
             //handleAuthorChange={({ target }) => setAuthor(target.value)}
             //handleUrlChange={({ target }) => setBlogUrl(target.value)}
-              setErrorMessage={setErrorMessage}
-              setInfoMessage={setInfoMessage}
-              blogs={blogs}
-              setBlogs={setBlogs}
-              user={user}
-              setBlogFormVisible={setBlogFormVisible}
+              addNewBlog={addNewBlog}
             />
           </Togglable>
           <h2>Blogs</h2>
           {blogs.map(blog =>
             <form key={blog.id}>
-              <Blog key={blog.id} blog={blog} blogs={blogs} user={user} setBlogs={setBlogs} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage} />
+              <Blog key={blog.id} blog={blog} blogs={blogs} user={user} setBlogs={setBlogs} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage} increaseLikes={(e) => increaseLikesOf(e, blog)}/>
             </form>
           )}
         </div>

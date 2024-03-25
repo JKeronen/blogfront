@@ -2,7 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import '../styles/styles.css'
 
-const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) => {
+const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage, increaseLikes }) => {
   const [visible, setVisible] = useState(false)
   const deleteBlog = async (e,id) => {
     e.preventDefault()
@@ -27,40 +27,16 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) 
     e.preventDefault()
     setVisible(!visible)
   }
-  const increaseLikes = async (e) => {
-    e.preventDefault()
-    console.log('Blogbefore' + JSON.stringify(blog))
-    console.log('User ' + JSON.stringify(user))
-    const likesincreased = {
-      title: blog.title,
-      author: blog.author,
-      user: blog.user,
-      url: blog.url,
-      likes: blog.likes + 1,
-      id: blog.id,
-    }
-    console.log('BlogUpdated' + JSON.stringify(likesincreased))
-    try {
-      await blogService.updateBlog(likesincreased, user)
-      const updatedBlogs = blogs.map(blog => blog.id === likesincreased.id? likesincreased : blog)
-      //sort by most likes
-      setBlogs(updatedBlogs.toSorted((a, b) => b.likes - a.likes))
-    } catch (exception) {
-      setErrorMessage(exception)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
+  
   const showLess = { display: visible ? 'none' : '' }
   const showMore = { display: visible ? '' : 'none' }
   return (
     <div className='blog'>
-      <div style={showLess}>
+      <div id='showLess' style={showLess}>
         Title: {blog.title}
         <button onClick={(e) => showAll(e)}>view</button>
       </div>
-      <div style={showMore}>
+      <div id='showMore' style={showMore}>
         <div>
           Title: {blog.title}
           <button onClick={(e) => showAll(e)}>hide</button>
@@ -69,14 +45,14 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage }) 
           Url: {blog.url}
         </div>
         <div>Likes: {blog.likes}
-          <button onClick={(e) => increaseLikes(e)}>like</button>
+          <button onClick={increaseLikes}>like</button>
         </div>
         <div>
           Author: {blog.author}
         </div>
-        {(blog.author === user.name)&&
-          <button onClick={(e) => deleteBlog(e, blog.id)}>Delete Blog</button>
-        }
+          {(blog.author === user.name)&&
+            <button onClick={(e) => deleteBlog(e, blog.id)}>Delete Blog</button>
+          }
       </div>
     </div>
   )
