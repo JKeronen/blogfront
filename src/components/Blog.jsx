@@ -15,12 +15,12 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage, in
         setInfoMessage('Blog "' + blog.title + '" is deleted successfully')
         setTimeout(() => {
           setInfoMessage(null)
-        }, 5000)
+        }, 1000)
       } catch (exception) {
         setErrorMessage('wrong blog id')
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000)
+        }, 1000)
       }}
   }
   const showAll = (e) => {
@@ -33,12 +33,12 @@ const Blog = ({ blog, blogs, user, setBlogs, setInfoMessage, setErrorMessage, in
   return (
     <div className='blog'>
       <div id='showLess' style={showLess}>
-        Title: {blog.title}
+        <h3>Title: {blog.title}</h3>
         <button onClick={(e) => showAll(e)}>view</button>
       </div>
       <div id='showMore' style={showMore}>
         <div>
-          Title: {blog.title}
+          <h3>Title: {blog.title}</h3>
           <button onClick={(e) => showAll(e)}>hide</button>
         </div>
         <div>

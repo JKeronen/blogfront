@@ -76,12 +76,12 @@ const App = () => {
       setBlogFormVisible(false)
       setTimeout(() => {
         setInfoMessage(null)
-      }, 5000)
+      }, 1000)
     } catch (exception) {
       setErrorMessage(exception)
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 1000)
     }
   }
   return (
@@ -89,7 +89,7 @@ const App = () => {
       <div>
         <Notification error={errorMessage} info={infoMessage} />
         {!user &&
-        <Togglable buttonLabel='login' visibility={loginVisible} setVisibility={setLoginVisible} >
+        <Togglable buttonLabel='log in' visibility={loginVisible} setVisibility={setLoginVisible} >
           <LoginForm
             user={user}
             setUser={setUser}
@@ -113,7 +113,7 @@ const App = () => {
           </Togglable>
           <h2>Blogs</h2>
           {blogs.map(blog =>
-            <form key={blog.id}>
+            <form key={blog.id} aria-label="form">
               <Blog key={blog.id} blog={blog} blogs={blogs} user={user} setBlogs={setBlogs} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage} increaseLikes={(e) => increaseLikesOf(e, blog)}/>
             </form>
           )}
